@@ -1,7 +1,26 @@
-url
-https://www.ssl.com/ja/%E6%96%B9%E6%B3%95/openssl%E3%82%92%E4%BD%BF%E7%94%A8%E3%81%97%E3%81%A6pfx-p12%E8%A8%BC%E6%98%8E%E6%9B%B8%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%82%92%E4%BD%9C%E6%88%90%E3%81%99%E3%82%8B/
-https://www.atmarkit.co.jp/ait/articles/1602/05/news039.html
-https://www.atmarkit.co.jp/ait/articles/1602/05/news039_2.html
+create ca key
+openssl genrsa -aes256 -out [cakey] 2048
+
+create ca csr
+openssl req -new -key [cakey] -out [cacsr]
+
+create ca crt
+openssl x509 -days 3650 -in [cacsr] -req -signkey [cakey] -out [cacrt]
+
+init index.txt
+touch [CAdir]/index.txt
+
+init serial
+echo 00 > [CAdir]/serial
+
+create server key
+openssl genrsa -aes256 -out [serverkey] 2048
+
+create server csr
+openssl req -new -key [serverkey] -out [servercsr]
+
+create server crt
+openssl ca -in [servercsr] -out [servercrt] -days 825
 
 create p12 file
 openssl pkcs12 -export -out [outfilename].pfx -inkey [privatekey].key -in [certfile].crt
@@ -27,3 +46,8 @@ openssl pkcs7 -in [p7bfile] -inform PEM -out [outfile] -outform PEM -print_certs
 p12>PEM exchange
 openssl pkcs12 -in [p12file] -out [outfile] -nodes
 
+url
+https://qiita.com/ll_kuma_ll/items/13c962a6a74874af39c6
+https://www.ssl.com/ja/%E6%96%B9%E6%B3%95/openssl%E3%82%92%E4%BD%BF%E7%94%A8%E3%81%97%E3%81%A6pfx-p12%E8%A8%BC%E6%98%8E%E6%9B%B8%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%82%92%E4%BD%9C%E6%88%90%E3%81%99%E3%82%8B/
+https://www.atmarkit.co.jp/ait/articles/1602/05/news039.html
+https://www.atmarkit.co.jp/ait/articles/1602/05/news039_2.html
